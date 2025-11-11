@@ -1,0 +1,141 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply for Job</title>
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        h2 {
+            text-align: center;
+            color: #2a2185;
+            font-size: 2.2em;
+            margin-bottom: 30px;
+        }
+
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            font-weight: 500;
+            margin-top: 10px;
+            display: block;
+            color: #333;
+        }
+
+        input[type="text"], input[type="email"], input[type="tel"], input[type="file"], select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #2a2185;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #1a1573;
+        }
+
+        .required {
+            color: red;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            form {
+                padding: 15px;
+            }
+
+            button {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Apply for {{ job.job_title }}</h2>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <!-- Full Name Field -->
+        <label for="name">Full Name: <span class="required">*</span></label>
+        <input type="text" name="name" id="name" placeholder="Enter your full name" required>
+
+        <label for=email">Email: <span class="required">*</span></label>
+        <input type="email" name="email" id="email" placeholder="Enter your email" required>
+    
+        <!-- Phone Number Field -->
+        <label for="phone">Phone Number: <span class="required">*</span></label>
+        <input type="tel" name="phone_number" id="phone" placeholder="Enter your phone number" required>
+        
+        <!-- Education Level -->
+        <label for="education">Highest Education Level: <span class="required">*</span></label>
+        <select name="education_level" id="education" required>
+            <option value="">Select your education level</option>
+            <option value="high_school">High School</option>
+            <option value="bachelor">Bachelor's Degree</option>
+            <option value="master">Master's Degree</option>
+            <option value="phd">PhD</option>
+        </select>
+    
+        <label for="work_experience">Work Experience: <span class="required">*</span></label>
+        <textarea name="work_experience" id="work_experience" placeholder="Enter your work experience" required></textarea>
+        <!-- Cover Letter -->
+        <label for="cover_letter">Cover Letter: <span class="required">*</span></label>
+        <textarea name="cover_letter" id="cover_letter" placeholder="Write your cover letter" required></textarea>
+
+        
+        
+        <!-- Resume Upload -->
+        <label for="resume">Upload Resume: <span class="required">*</span></label>
+        <input type="file" name="resume" id="resume" required>
+    
+        <!-- Submit Button -->
+        <button type="submit"><i class="fas fa-paper-plane"></i> Apply</button>
+    </form>
+    
+
+</body>
+</html>

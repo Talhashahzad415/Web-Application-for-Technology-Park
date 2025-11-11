@@ -1,0 +1,183 @@
+{% load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Dashboard</title>
+    <!-- ======= Styles ====== -->
+    {% comment %} <link rel="stylesheet" href="{% static 'css/admindashboard.css' %}"> {% endcomment %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- ====== ionicons ======= -->
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <style>
+        /* =========== Google Fonts ============ */
+
+* {
+  font-family: "Ubuntu", sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.room-list {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+  background: linear-gradient(to bottom, #a18cd1, #fbc2eb, #a1c4fd);   border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  text-align: center;
+  color: #333;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.room-card {
+  margin-top: 20px;
+  margin-bottom: 30px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  background-color: #fff;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.room-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.room-card h3 {
+  margin-bottom: 15px;
+  color: #5b9bd5;
+  font-size: 20px;
+}
+
+/* Circular table cell styling */
+table th, table td {
+  padding: 10px;
+  text-align: center;
+  border: 2px solid #5b9bd5;
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  vertical-align: middle;
+  color: #333;
+  background-color: #eef3fb;
+}
+
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 15px;
+}
+
+.status {
+  display: inline-block;
+  padding: 8px 12px;
+  border-radius: 5px;
+  font-size: 14px;
+  color: #fff;
+}
+
+.status.available {
+  background-color: #28a745;
+}
+
+.status.booked {
+  background-color: #dc3545;
+}
+
+form {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+select {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  width: 250px;
+  margin-right: 10px;
+  background-color: #5b9bd5;
+  color: white;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #5b9bd5;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #3a78b7;
+}
+
+
+/* Responsive Design */
+
+
+
+    </style>
+</head>
+
+<body>
+    <!-- =============== Navigation ================ -->
+                  <div class="room-list">
+                    <h2>Desk Availability</h2>
+                
+                    <form method="POST">
+                        {% csrf_token %}
+                        {{ form.room }}
+                        <button type="submit">Check Availability</button>
+                    </form>
+                
+                    {% if no_desk_message %}
+                        <p class="message">{{ no_desk_message }}</p>
+                    {% endif %}
+                
+                    {% for desk_availability in availability %}
+                        <div class="room-card">
+                            <h3>Desk {{ desk_availability.desk_number }}</h3>
+                            <table>
+                                <tr>
+                                    <th>Time Slot</th>
+                                    <th>Status</th>
+                                </tr>
+                                {% for time_slot, status in desk_availability.time_slots.items %}
+                                    <tr>
+                                        <td>{{ time_slot }}</td>
+                                        <td>
+                                            <span class="status {{ status|lower }}">{{ status }}</span>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                    {% endfor %}
+                </div>
+                </section>
+            </main>
+            
+        </body>
+    </head>
+    </html>
+
+

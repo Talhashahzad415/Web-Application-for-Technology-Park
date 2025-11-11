@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Freelancer Contract Detail</title>
+    <style>
+        .status-agreed { color: green; }
+        .status-disagreed { color: red; }
+    </style>
+</head>
+<body>
+    <h1>Contract for {{ contract.freelancer.freelancer_name }}</h1>
+    <p>{{ contract.contract_details }}</p>
+
+    {% if contract.status == 'Pending' %}
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" name="agree">Agree</button>
+            <button type="submit" name="disagree">Disagree</button>
+        </form>
+    {% elif contract.status == 'Agreed' %}
+        <p class="status-agreed">Agreed</p>
+        <button onclick="window.print()">Download</button>
+    {% elif contract.status == 'Disagreed' %}
+        <p class="status-disagreed">Disagreed</p>
+    {% endif %}
+</body>
+</html>

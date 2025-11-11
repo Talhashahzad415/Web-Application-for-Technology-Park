@@ -1,0 +1,792 @@
+{% load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <!-- ======= Styles ====== -->
+    {% comment %} <link rel="stylesheet" href="{% static 'css/admindashboard.css' %}"> {% endcomment %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- ====== ionicons ======= -->
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <style>
+        /* =========== Google Fonts ============ */
+
+* {
+  font-family: "Ubuntu", sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --blue: #2a2185;
+  --white: #fff;
+  --gray: #f5f5f5;
+  --black1: #222;
+  --black2: #999;
+  --green: #24c146;
+}
+
+body {
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.container {
+  display: flex;
+  width: 100%;
+}
+
+/* =============== Navigation ================ */
+.navigation {
+  margin-top:60px;
+  position: fixed;
+  width: 300px;
+  height: 100%;
+  background: linear-gradient(to bottom, #92736c, #5e2e2a);
+  border-left: 10px solid var(--blue);
+  transition: width 0.5s ease;
+  overflow: hidden;
+  box-shadow: 10px 0px 20px rgba(0, 0, 0, 0.2); /* Adds a shadow for depth */
+}
+
+.navigation.active {
+  width: 80px;
+}
+
+.navigation ul {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.navigation ul li {
+  position: relative;
+  width: 100%;
+  list-style: none;
+  border-top-left-radius: 30px;
+  border-bottom-left-radius: 30px;
+}
+
+.navigation ul li:hover,
+.navigation ul li.hovered {
+  background-color: var(--white);
+}
+
+.navigation ul li:nth-child(1) {
+  margin-bottom: 40px;
+  pointer-events: none;
+}
+
+.navigation ul li a {
+  position: relative;
+  display: block;
+  width: 100%;
+  display: flex;
+  text-decoration: none;
+  color: var(--white);
+}
+.navigation ul li:hover a,
+.navigation ul li.hovered a {
+  color: var(--blue);
+}
+
+.navigation ul li a .icon {
+  position: relative;
+  display: block;
+  min-width: 60px;
+  height: 60px;
+  line-height: 75px;
+  text-align: center;
+  font-size: 1.75rem;
+  transform: perspective(400px) translateZ(20px) rotateX(5deg) rotateY(5deg);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+.navigation ul li a .icon ion-icon {
+  font-size: 1.75rem;
+}
+
+.navigation ul li a .title {
+  position: relative;
+  display: block;
+  padding: 0 10px;
+  height: 60px;
+  line-height: 60px;
+  text-align: start;
+  white-space: nowrap;
+}
+
+/* --------- curve outside ---------- */
+.navigation ul li:hover a::before,
+.navigation ul li.hovered a::before {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: -50px;
+  width: 50px;
+  height: 50px;
+  background-color: transparent;
+  border-radius: 50%;
+  box-shadow: 35px 35px 0 10px var(--white);
+  pointer-events: none;
+}
+.navigation ul li a .icon:hover {
+  transform: perspective(400px) translateZ(30px) rotateX(0deg) rotateY(0deg) scale(1.1);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+}
+.navigation ul li:hover a::after,
+.navigation ul li.hovered a::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: -50px;
+  width: 50px;
+  height: 50px;
+  background-color: transparent;
+  border-radius: 50%;
+  box-shadow: 35px -35px 0 10px var(--white);
+  pointer-events: none;
+}
+
+/* ===================== Main ===================== */
+.main {
+  position: absolute;
+  width: calc(100% - 300px);
+  left: 300px;
+  min-height: 100vh;
+  background: var(--white);
+  transition: 0.5s;
+}
+.main.active {
+  width: calc(100% - 80px);
+  left: 80px;
+}
+
+.topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background:linear-gradient(to bottom, #92736c, #5e2e2a);
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  z-index: 1000;
+}
+
+.toggle {
+  color: white; 
+  position: relative;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2.5rem;
+  cursor: pointer;
+}
+
+.dashboard-title {
+  font-family: "Algerian";
+  font-size: 24px;
+  font-weight: lighter;
+  color: white;
+  text-align: center;
+  flex-grow: 1;
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.username {
+  font-size: 17px;
+  color: white;
+  margin: 0;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.dropdown {
+  position: relative;
+}
+
+.dropdown-icon {
+  font-size: 20px;
+  color: white;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.dropdown-menu {
+  display: none; /* Initially hidden */
+  position: absolute;
+  top: 55px;
+  width:120px;
+  right: -10px;
+  background: linear-gradient(to bottom, #92736c, #5e2e2a);
+  border-radius: 4px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.dropdown-menu li {
+  list-style: none;
+}
+
+.dropdown-menu li a {
+  color: white;
+  text-decoration: none;
+  display: block;
+  padding: 8px;
+}
+.dropdown-menu li a:hover {
+  background: linear-gradient(to bottom, #92736c, #5e2e2a);
+}
+
+.dropdown.active .dropdown-icon {
+  transform: rotate(180deg);
+}
+
+.dropdown.active .dropdown-menu {
+  display: block;
+}
+
+.logo img {
+  background-color: white;
+  border-radius: 20%;
+  border: none;
+  width: 55px;
+  margin-left: 11px;
+  margin-top: 10px;
+}
+.sco{
+    height: 58px;
+}
+
+main {
+  padding: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+section {
+  margin-top: 90px;
+  background: linear-gradient(to bottom, #a18cd1, #fbc2eb, #a1c4fd); 
+  padding: 50px;
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3), 0 6px 6px rgba(0, 0, 0, 0.23); /* Enhanced shadow for 3D effect */
+  transform: perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1.05); /* Subtle 3D transformation */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth animation */
+  width: 95%;
+}
+section:hover {
+  transform: perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1.06); /* Lift and slightly rotate on hover */
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5), 0 10px 10px rgba(0, 0, 0, 0.25); /* Darker shadow on hover */
+}
+
+.app-wrapper {
+  max-width: 1000px;
+  margin: 50px auto;
+  padding: 40px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;
+}
+
+h2 {
+  color: #2a3f54;
+  text-align: center;
+  font-size: 2.8em;
+  font-weight: 700;
+  margin-bottom: 40px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Application Card Layout */
+.application-card {
+  background-color: #f8f9fa;
+  border-radius: 16px;
+  padding: 30px;
+  margin-bottom: 40px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s, box-shadow 0.3s;
+  border-left: 5px solid #6c63ff;
+  border-bottom: 5px solid #6c63ff;
+}
+
+.application-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+}
+
+.application-content {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.application-content p {
+  margin: 0;
+  font-size: 1.1em;
+  color: #555;
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+.application-content strong {
+  font-size: 1.25em;
+  color: #2a3f54;
+  font-weight: 600;
+}
+
+/* View and Download Buttons */
+.resume-actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.btn-view, .btn-download {
+  text-decoration: none;
+  color: #fff;
+  background: linear-gradient(135deg, #6c63ff 0%, #4e49db 100%);
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  display: inline-block;
+  text-align: center;
+  transition: background 0.3s, box-shadow 0.3s, transform 0.3s;
+}
+
+.btn-view:hover, .btn-download:hover {
+  background: linear-gradient(135deg, #4e49db 0%, #6c63ff 100%);
+  box-shadow: 0 6px 18px rgba(108, 99, 255, 0.4);
+  transform: translateY(-3px);
+}
+
+.resume-icon {
+  margin-right: 10px;
+  transition: transform 0.3s ease;
+}
+
+.btn-view:hover .resume-icon, .btn-download:hover .resume-icon {
+  transform: scale(1.2);
+}
+
+/* Delete Button Styling */
+.btn-delete {
+  background: none;
+  border: 2px solid #ff6b6b;
+  color: #ff6b6b;
+  cursor: pointer;
+  font-size: 1.1em;
+  font-weight: 600;
+  margin-top: 20px;
+  padding: 10px 15px;
+  border-radius: 8px;
+  transition: color 0.3s, border 0.3s, box-shadow 0.3s, transform 0.3s;
+}
+
+.btn-delete:hover {
+  color: #fff;
+  background-color: #ff6b6b;
+  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+  transform: translateY(-3px);
+}
+
+.btn-delete i {
+  margin-right: 8px;
+}
+
+/* No Applications Message */
+.no-applications-msg {
+  font-size: 1.5em;
+  color: #888;
+  text-align: center;
+  margin-top: 60px;
+  font-weight: 500;
+  letter-spacing: 1px;
+}
+.message {
+    display: none; /* Initially hidden */
+    color: red;
+  }
+  
+  .messages {
+    margin: 20px 0;
+    padding: 10px;
+  }
+  
+  .message {
+    position: relative;
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    animation: slideIn 0.5s ease-out;
+    display: flex;
+    align-items: center;
+  }
+  
+  .message.success {
+    background-color: #d4edda;
+    color: #155724;
+    border-left: 5px solid #28a745;
+  }
+  
+  .message .icon {
+    margin-right: 10px;
+    font-size: 20px;
+  }
+  
+  .close-button {
+    position: absolute;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #155724;
+    cursor: pointer;
+  }
+  
+  .close-button:hover {
+    color: #721c24;
+  }
+  
+  @keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+  }
+  
+  .email-button {
+    background: linear-gradient(135deg, #2575fc 0%, #6a11cb 100%); /* Gradient button */
+    color: white;
+    padding: 20px 45px;
+    text-decoration: none;
+    border-radius: 30px;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.3s ease;
+    display: inline-block;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    font-size: 14px;
+    margin-left:80px;
+  }
+  .email-button:hover {
+    transform: translateY(-3px); /* Button rises slightly */
+    background-color: #4a90e2;
+  }  
+
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  section {
+    flex: 1 1 calc(50% - 40px);
+    max-width: calc(50% - 40px);
+  }
+  .navigation {
+    left: -300px;
+  }
+  .navigation.active {
+    width: 300px;
+    left: 0;
+  }
+  .main {
+    width: 100%;
+    left: 0;
+  }
+  .main.active {
+    left: 300px;
+  }
+}
+
+@media (max-width: 768px) {
+  section{
+    flex: 1 1 calc(100% - 40px);
+    max-width: calc(100% - 40px);
+  }
+
+  .navigation {
+    left: -300px;
+  }
+  .navigation.active {
+    width: 300px;
+    left: 0;
+  }
+  .main {
+    width: 100%;
+    left: 0;
+  }
+
+  .main.active {
+    width: calc(100% - 80px);
+    left: 300px;
+  }
+
+  .dashboard-title {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .topbar {
+    flex-direction: row; /* Ensure elements are in the same row */
+    align-items: center;
+    justify-content: space-between; /* Add space between the elements */
+  }
+
+  .dashboard-title {
+    font-size: 18px;
+    margin-top: 0; /* Remove top margin for alignment */
+    margin-left: 10px; /* Optional: add left margin for spacing */
+  }
+
+  .user {
+    margin-left: auto; /* Pushes the user element to the right */
+  }
+
+  /* Other styles */
+  .main {
+    width: 100%;
+    left: 0;
+  }
+
+  .navigation {
+    width: 100%;
+    left: -100%;
+    z-index: 1000;
+  }
+
+  .navigation.active {
+    width: 100%;
+    left: 0;
+  }
+
+  .toggle {
+    z-index: 10001;
+  }
+
+  .main.active .toggle {
+    color: #fff;
+    position: fixed;
+    right: 0;
+    left: initial;
+  }
+
+  section{
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+
+
+}
+
+
+    </style>
+</head>
+
+<body>
+    <!-- =============== Navigation ================ -->
+    <div class="container">
+      <div class="navigation">
+          <ul>
+              <li>
+                  <a href="#">
+                      <span class="logo">
+                          <img src="{% static 'images/SCO_New_Logo.png' %}" alt="">
+                      </span>
+                      <span class="logo">
+                          <img src="{% static 'images/University_of_Poonch_logo.png'%}" alt="">
+                      </span>
+                  </a>
+              </li>
+
+              <li>
+                  <a href="{% url 'companydashboard' %}">
+                      <span class="icon">
+                          <ion-icon name="home-outline"></ion-icon>
+                      </span>
+                      <span class="title">Dashboard</span>
+                  </a>
+              </li>
+
+              <li>
+                  <a href="{% url 'portfolio' %}">
+                      <span class="icon">
+                          <ion-icon name="person-outline"></ion-icon>
+                      </span>
+                      <span class="title">portfolio</span>
+                  </a>
+              </li>
+
+              <!-- Complaint -->
+              <li>
+                  <a href="{% url 'complaint' %}">
+                      <span class="icon">
+                          <ion-icon name="alert-circle-outline"></ion-icon>
+                      </span>
+                      <span class="title">Complaint</span>
+                  </a>
+              </li>
+
+              <!-- Rooms -->
+              <li>
+                  <a href="{% url 'show_rooms' %}">
+                      <span class="icon">
+                          <ion-icon name="business-outline"></ion-icon>
+                      </span>
+                      <span class="title">Rooms</span>
+                  </a>
+              </li>
+              
+              <li>
+                  <a href="#">
+                      <span class="icon">
+                          <ion-icon name="help-outline"></ion-icon>
+                      </span>
+                      <span class="title">FAQ</span>
+                  </a>
+              </li>
+
+              <li>
+                  <a href="{% url 'company' %}" id="Signout-link">
+                      <span class="icon">
+                          <ion-icon name="log-out-outline"></ion-icon>
+                      </span>
+                      <span class="title">Sign Out</span>
+                  </a>
+              </li>
+          </ul>
+      </div>
+
+        <div class="main">
+            <div class="topbar">
+                <div class="toggle">
+                    <ion-icon name="menu-outline"></ion-icon>
+                </div>
+
+                <div class="dashboard-title">
+                    Company Dashboard
+                </div>
+                <div class="user">
+                  <p class="username">Hi, {{ company_name }}</p>
+                  <img src="{% static 'images/avatar.png' %}" alt="User Avatar" class="avatar">
+                  <div class="dropdown">
+                    <i class="fas fa-chevron-down dropdown-icon"></i>
+                    <ul class="dropdown-menu">
+                      <li><a href="{% url 'company_edit_profile' %}">Edit Profile</a></li>
+                      <li><a href="{%  url 'company' %}">Logout</a></li>
+                    </ul>
+                  </div>
+                </div>
+            </div>
+            <main>
+                <section class="card">
+          
+                  <div class="app-wrapper">
+                    <h2>Applications for {{ job.job_title }}</h2>
+                    {% if messages %}
+                        <div class="messages">
+                            {% for message in messages %}
+                                <div class="message {{ message.tags }}">
+                                    <span class="icon">✔️</span>
+                                    <span class="text">{{ message }}</span>
+                                    <button class="close-button" onclick="this.parentElement.style.display='none';">&times;</button>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+            
+                    {% if applications %}
+                        {% for application in applications %}
+                            <div class="application-card">
+                                <div class="application-content">
+                                    <!-- Applicant's Details -->
+                                    <p><strong>Applicant Name:</strong> {{ application.name }}</p>
+                                    <p><strong>Email:</strong> {{ application.email|default:"N/A" }}</p>
+                                    <p><strong>Phone Number:</strong> {{ application.phone_number|default:"N/A" }}</p>
+                                    <p><strong>Education Level:</strong> {{ application.education_level|default:"N/A" }}</p>
+                                    <p><strong>Work Experience:</strong> {{ application.work_experience|default:"Not Provided" }}</p>
+                                    <p><strong>Cover Letter:</strong> {{ application.cover_letter }}</p>
+            
+                                    <!-- Resume View and Download Links -->
+                                    {% if application.resume %}
+                                    <div class="resume-actions">
+                                        <a href="{% url 'view_resume' application.id %}" class="btn-view">
+                                            <i class="fas fa-eye resume-icon"></i> View Resume
+                                        </a>
+                                        <a href="{% url 'download_resume' application.id %}" class="btn-download">
+                                            <i class="fas fa-file-download resume-icon"></i> Download Resume
+                                        </a>
+                                    </div>
+                                    {% endif %}
+            
+                                    <!-- Delete Button -->
+                                    <form method="post" action="{% url 'delete_application' application.id %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn-delete" title="Delete Application">
+                                            <i class="fas fa-trash-alt"></i> Delete
+                                        </button>
+                                        <a href="mailto:{{ application.email }}" class="email-button">Send Email</a>
+                                    </form>
+                                    
+                                </div>
+                               
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="no-applications-msg">No applications yet.</p>
+                    {% endif %}
+                </div>
+                </section>
+            </main>
+            
+            <script src="{% static 'js/adminScripts.js' %}"></script>
+
+    <!-- ====== ionicons ======= -->
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <script>document.addEventListener('DOMContentLoaded', function() {
+      const dropdownIcon = document.querySelector('.dropdown-icon');
+    
+      dropdownIcon.addEventListener('click', function() {
+        const dropdown = this.parentElement;
+        dropdown.classList.toggle('active'); // Toggle active class
+      });
+    });
+  </script>
+        </body>
+    </head>
+    </html>
+
+

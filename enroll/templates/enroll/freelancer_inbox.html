@@ -1,0 +1,616 @@
+{% load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Dashboard</title>
+    <!-- ======= Styles ====== -->
+    {% comment %} <link rel="stylesheet" href="{% static 'css/admindashboard.css' %}"> {% endcomment %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- ====== ionicons ======= -->
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <style>
+        /* =========== Google Fonts ============ */
+
+* {
+  font-family: "Ubuntu", sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --blue: #2a2185;
+  --white: #fff;
+  --gray: #f5f5f5;
+  --black1: #222;
+  --black2: #999;
+  --green: #24c146;
+}
+
+body {
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.container {
+  display: flex;
+  width: 100%;
+}
+
+/* =============== Navigation ================ */
+.navigation {
+  margin-top:60px;
+  position: fixed;
+  width: 300px;
+  height: 100%;
+  background: linear-gradient(to bottom, #92736c, #5e2e2a);
+  border-left: 10px solid var(--blue);
+  transition: width 0.5s ease;
+  overflow: hidden;
+  box-shadow: 10px 0px 20px rgba(0, 0, 0, 0.2); /* Adds a shadow for depth */
+}
+
+.navigation.active {
+  width: 80px;
+}
+
+.navigation ul {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.navigation ul li {
+  position: relative;
+  width: 100%;
+  list-style: none;
+  border-top-left-radius: 30px;
+  border-bottom-left-radius: 30px;
+}
+
+.navigation ul li:hover,
+.navigation ul li.hovered {
+  background-color: var(--white);
+}
+
+.navigation ul li:nth-child(1) {
+  margin-bottom: 40px;
+  pointer-events: none;
+}
+
+.navigation ul li a {
+  position: relative;
+  display: block;
+  width: 100%;
+  display: flex;
+  text-decoration: none;
+  color: var(--white);
+}
+.navigation ul li:hover a,
+.navigation ul li.hovered a {
+  color: var(--blue);
+}
+
+.navigation ul li a .icon {
+  position: relative;
+  display: block;
+  min-width: 60px;
+  height: 60px;
+  line-height: 75px;
+  text-align: center;
+  font-size: 1.75rem;
+  transform: perspective(400px) translateZ(20px) rotateX(5deg) rotateY(5deg);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+.navigation ul li a .icon ion-icon {
+  font-size: 1.75rem;
+}
+
+.navigation ul li a .title {
+  position: relative;
+  display: block;
+  padding: 0 10px;
+  height: 60px;
+  line-height: 60px;
+  text-align: start;
+  white-space: nowrap;
+}
+
+/* --------- curve outside ---------- */
+.navigation ul li:hover a::before,
+.navigation ul li.hovered a::before {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: -50px;
+  width: 50px;
+  height: 50px;
+  background-color: transparent;
+  border-radius: 50%;
+  box-shadow: 35px 35px 0 10px var(--white);
+  pointer-events: none;
+}
+.navigation ul li a .icon:hover {
+  transform: perspective(400px) translateZ(30px) rotateX(0deg) rotateY(0deg) scale(1.1);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+}
+.navigation ul li:hover a::after,
+.navigation ul li.hovered a::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: -50px;
+  width: 50px;
+  height: 50px;
+  background-color: transparent;
+  border-radius: 50%;
+  box-shadow: 35px -35px 0 10px var(--white);
+  pointer-events: none;
+}
+
+/* ===================== Main ===================== */
+.main {
+  position: absolute;
+  width: calc(100% - 300px);
+  left: 300px;
+  min-height: 100vh;
+  background: var(--white);
+  transition: 0.5s;
+}
+.main.active {
+  width: calc(100% - 80px);
+  left: 80px;
+}
+
+.topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background:linear-gradient(to bottom, #92736c, #5e2e2a);
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  z-index: 1000;
+}
+
+.toggle {
+  color: white; 
+  position: relative;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2.5rem;
+  cursor: pointer;
+}
+
+.dashboard-title {
+  font-family: "Algerian";
+  font-size: 24px;
+  font-weight: lighter;
+  color: white;
+  text-align: center;
+  flex-grow: 1;
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.username {
+  font-size: 17px;
+  color: white;
+  margin: 0;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.dropdown {
+  position: relative;
+}
+
+.dropdown-icon {
+  font-size: 20px;
+  color: white;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.dropdown-menu {
+  display: none; /* Initially hidden */
+  position: absolute;
+  top: 55px;
+  width:120px;
+  right: -10px;
+  background: linear-gradient(to bottom, #92736c, #5e2e2a);
+  border-radius: 4px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.dropdown-menu li {
+  list-style: none;
+}
+
+.dropdown-menu li a {
+  color: white;
+  text-decoration: none;
+  display: block;
+  padding: 8px;
+}
+.dropdown-menu li a:hover {
+  background: linear-gradient(to bottom, #92736c, #5e2e2a);
+}
+
+.dropdown.active .dropdown-icon {
+  transform: rotate(180deg);
+}
+
+.dropdown.active .dropdown-menu {
+  display: block;
+}
+
+.logo img {
+  background-color: white;
+  border-radius: 20%;
+  border: none;
+  width: 55px;
+  margin-left: 11px;
+  margin-top: 10px;
+}
+.sco{
+    height: 58px;
+}
+
+main {
+  padding: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+section {
+  margin-top: 70px;
+  background: linear-gradient(to bottom, #a18cd1, #fbc2eb, #a1c4fd); 
+  padding: 50px;
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3), 0 6px 6px rgba(0, 0, 0, 0.23); /* Enhanced shadow for 3D effect */
+  transform: perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1.05); /* Subtle 3D transformation */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth animation */
+  width: 90%;
+}
+section:hover {
+  transform: perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1.06); /* Lift and slightly rotate on hover */
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5), 0 10px 10px rgba(0, 0, 0, 0.25); /* Darker shadow on hover */
+}
+
+        h1 {
+            text-align: center;
+            color: #ff6f61;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-transform: uppercase;
+        }
+
+       .u_list {
+          list-style-type: none;
+          padding: 0;
+          margin: 0;
+      }
+
+      .l_list {
+          background: #f9f9f9;
+          margin: 20px 0;
+          padding: 20px;
+          border-radius: 15px;
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+          display: flex;
+          align-items: center;
+          transition: background-color 0.3s, transform 0.3s ease;
+      } 
+
+      .l_list:hover {
+          background-color: #ffebee;
+          transform: translateY(-5px);
+      }
+
+      .link {
+          text-decoration: none;
+          color: #333;
+          font-size: 1.4em;
+          font-weight: bold;
+          transition: color 0.3s ease;
+      }
+
+      .link:hover {
+          color: #ff6f61;
+      }
+
+      .iconinbox {
+          font-size: 2.5em;
+          margin-right: 20px;
+          color: #ff6f61;
+      }
+
+
+        .error {
+            color: #dc3545;
+            margin-bottom: 20px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  section {
+    flex: 1 1 calc(50% - 40px);
+    max-width: calc(50% - 40px);
+  }
+  .navigation {
+    left: -300px;
+  }
+  .navigation.active {
+    width: 300px;
+    left: 0;
+  }
+  .main {
+    width: 100%;
+    left: 0;
+  }
+  .main.active {
+    left: 300px;
+  }
+}
+
+@media (max-width: 768px) {
+  section{
+    flex: 1 1 calc(100% - 40px);
+    max-width: calc(100% - 40px);
+  }
+
+  .navigation {
+    left: -300px;
+  }
+  .navigation.active {
+    width: 300px;
+    left: 0;
+  }
+  .main {
+    width: 100%;
+    left: 0;
+  }
+
+  .main.active {
+    width: calc(100% - 80px);
+    left: 300px;
+  }
+
+  .dashboard-title {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .topbar {
+    flex-direction: row; /* Ensure elements are in the same row */
+    align-items: center;
+    justify-content: space-between; /* Add space between the elements */
+  }
+
+  .dashboard-title {
+    font-size: 18px;
+    margin-top: 0; /* Remove top margin for alignment */
+    margin-left: 10px; /* Optional: add left margin for spacing */
+  }
+
+  .user {
+    margin-left: auto; /* Pushes the user element to the right */
+  }
+
+  /* Other styles */
+  .main {
+    width: 100%;
+    left: 0;
+  }
+
+  .navigation {
+    width: 100%;
+    left: -100%;
+    z-index: 1000;
+  }
+
+  .navigation.active {
+    width: 100%;
+    left: 0;
+  }
+
+  .toggle {
+    z-index: 10001;
+  }
+
+  .main.active .toggle {
+    color: #fff;
+    position: fixed;
+    right: 0;
+    left: initial;
+  }
+
+  section{
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+
+
+}
+
+
+    </style>
+</head>
+
+<body>
+    <!-- =============== Navigation ================ -->
+    <div class="container">
+      <div class="navigation">
+          <ul>
+              <li>
+                  <a href="#">
+                      <span class="logo">
+                          <img src="{% static 'images/SCO_New_Logo.png' %}" alt="" class="sco">
+                      </span>
+                      <span class="logo">
+                          <img src="{% static 'images/University_of_Poonch_logo.png'%}" alt="">
+                      </span>
+                  </a>
+              </li>
+
+              <li>
+                  <a href="{% url 'freelancerdashboard' %}">
+                      <span class="icon">
+                          <ion-icon name="home-outline"></ion-icon>
+                      </span>
+                      <span class="title">Dashboard</span>
+                  </a>
+              </li>
+
+              <li>
+                  <a href="{% url 'freelancer_portfolio' %}">
+                      <span class="icon">
+                          <ion-icon name="person-outline"></ion-icon>
+                      </span>
+                      <span class="title">portfolio</span>
+                  </a>
+              </li>
+
+              <!-- Complaint -->
+              <li>
+                  <a href="{% url 'freelancer_complaint' %}">
+                      <span class="icon">
+                          <ion-icon name="alert-circle-outline"></ion-icon>
+                      </span>
+                      <span class="title">Complaint</span>
+                  </a>
+              </li>
+
+              <!-- Rooms -->
+              <li>
+                  <a href="{% url 'room_list' %}">
+                      <span class="icon">
+                          <ion-icon name="business-outline"></ion-icon>
+                      </span>
+                      <span class="title">Rooms</span>
+                  </a>
+              </li>
+              
+              <li>
+                  <a href="#">
+                      <span class="icon">
+                          <ion-icon name="help-outline"></ion-icon>
+                      </span>
+                      <span class="title">FAQ</span>
+                  </a>
+              </li>
+
+              <li>
+                  <a href="{% url 'freelancer' %} " id="Signout-link">
+                      <span class="icon">
+                          <ion-icon name="log-out-outline"></ion-icon>
+                      </span>
+                      <span class="title">Sign Out</span>
+                  </a>
+              </li>
+          </ul>
+      </div>
+
+
+        <div class="main">
+            <div class="topbar">
+                <div class="toggle">
+                    <ion-icon name="menu-outline"></ion-icon>
+                </div>
+
+                <div class="dashboard-title">
+                    Freelancer Dashboard
+                </div>
+                <div class="user">
+                  <p class="username">Hi, {{ freelancer_name }}</p>
+                  <img src="{% static 'images/avatar.png' %}" alt="User Avatar" class="avatar">
+                  <div class="dropdown">
+                    <i class="fas fa-chevron-down dropdown-icon"></i>
+                    <ul class="dropdown-menu">
+                      <li><a href="{% url 'freelancer_edit_profile' %}">Edit Profile</a></li>
+                      <li><a href="{%  url 'freelancer' %}">Logout</a></li>
+                    </ul>
+                  </div>
+                </div>
+            </div>
+            <main>
+                <section class="card">
+          
+                    <h1>Your Inbox</h1>
+                    <ul class="u_list">
+                        {% for sender in unique_senders %}
+                            <li class="l_list">
+                                <span class="iconinbox">
+                                    {% if sender.sender_type == 'freelancer' %}
+                                        👤 <!-- Freelancer Icon -->
+                                    {% else %}
+                                        🏢 <!-- Company Icon -->
+                                    {% endif %}
+                                </span>
+                                <a class='link' href="{% if sender.sender_type == 'freelancer' %} {% url 'messages_from_sender' sender.id 'freelancer' %}
+                                          {% else %} {% url 'messages_from_sender' sender.id 'company' %}
+                                          {% endif %}">
+                                    {% if sender.sender_type == 'freelancer' %}
+                                        {{ sender.freelancer_name }} (Freelancer)
+                                    {% else %}
+                                        {{ sender.company_name }} (Company)
+                                    {% endif %}
+                                </a>
+                            </li>
+                        {% empty %}
+                            <p class="empty-message">Your inbox is empty.</p>
+                        {% endfor %}
+                    </ul>
+                </section>
+            </main>
+            
+            <script src="{% static 'js/adminScripts.js' %}"></script>
+
+    <!-- ====== ionicons ======= -->
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <script>document.addEventListener('DOMContentLoaded', function() {
+      const dropdownIcon = document.querySelector('.dropdown-icon');
+    
+      dropdownIcon.addEventListener('click', function() {
+        const dropdown = this.parentElement;
+        dropdown.classList.toggle('active'); // Toggle active class
+      });
+    });
+  </script>
+        </body>
+    </head>
+    </html>
+
+

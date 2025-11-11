@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reply to Message</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            width: 80%;
+            max-width: 800px;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 2.5em;
+            color: #007bff;
+            text-align: center;
+            margin-bottom: 25px;
+            font-weight: 500;
+        }
+
+        .original-message {
+            background-color: #f9f9f9;
+            border-left: 5px solid #007bff;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .message-icon {
+            font-size: 2em;
+            color: #007bff;
+            margin-right: 15px;
+        }
+
+        .message-content {
+            flex-grow: 1;
+        }
+
+        .message-content p {
+            margin: 8px 0;
+            font-size: 1.1em;
+        }
+
+        .message-content strong {
+            color: #007bff;
+            font-weight: 500;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        form textarea {
+            width: 100%;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            font-size: 1.1em;
+            resize: none;
+            min-height: 150px;
+            transition: border-color 0.3s ease;
+        }
+
+        form textarea:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        form button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        form button:hover {
+            background-color: #0056b3;
+        }
+
+        form button svg {
+            margin-left: 10px;
+        }
+
+        .csrf-token {
+            display: none;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                width: 95%;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .original-message {
+                flex-direction: column;
+            }
+
+            .message-icon {
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Reply to Message</h1>
+        <div class="original-message">
+            <div class="message-icon">📧</div>
+            <div class="message-content">
+                <p><strong>From:</strong> 
+                    {% if message.sender %} {{ message.sender.freelancer_name }}
+                    {% else %} {{ message.company_sender.company_name }}
+                    {% endif %}
+                </p>
+                <p><strong>Subject:</strong> {{ message.subject }}</p>
+                <p><strong>Message:</strong> {{ message.body }}</p>
+            </div>
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">
+                Send Reply
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="20" height="20">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 17l4-4-4-4m4 4H3m13 4v1a3 3 0 003 3h2a3 3 0 003-3v-1m0-16v1a3 3 0 01-3 3h-2a3 3 0 01-3-3V3m-6 10l-4-4 4-4" />
+                </svg>
+            </button>
+        </form>
+    </div>
+</body>
+</html>

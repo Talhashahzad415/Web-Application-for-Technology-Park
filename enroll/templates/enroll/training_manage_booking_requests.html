@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Booking Requests</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f7f8fc;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #2C3E50;
+            font-size: 2.5rem;
+        }
+
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px auto;
+            background-color: #ffffff;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        thead {
+            background-color: #34495e;
+            color: #fff;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            font-size: 1.1rem;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+
+        /* Links for Actions */
+        a.button {
+            text-decoration: none;
+            padding: 10px 20px;
+            font-weight: bold;
+            border-radius: 5px;
+            color: #fff;
+            background-color: #3498db;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        a.button:hover {
+            background-color: #2980b9;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Styling the no records message */
+        p {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.2rem;
+            color: #888;
+        }
+
+        /* Responsive Design */
+        @media screen and (max-width: 768px) {
+            table, thead, tbody, th, td, tr {
+                display: block;
+                width: 100%;
+            }
+
+            th {
+                position: absolute;
+                top: -9999px;
+                left: -9999px;
+            }
+
+            tr {
+                border: 1px solid #ccc;
+                margin-bottom: 10px;
+            }
+
+            td {
+                border: none;
+                border-bottom: 1px solid #eee;
+                position: relative;
+                padding-left: 50%;
+                text-align: left;
+            }
+
+            td:before {
+                content: attr(data-label);
+                position: absolute;
+                left: 10px;
+                font-weight: bold;
+                color: #2C3E50;
+            }
+
+            td:last-child {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Pending Booking Requests</h1>
+
+    {% if booking_requests %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Room</th>
+                    <th>Company</th>
+                    <th>Start Time</th>
+                    <th>End Time</th>
+                    <th>Booking Date</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for request in booking_requests %}
+                    <tr>
+                        <td data-label="Room">Room {{ request.room.number }}</td>
+                        <td data-label="Company">{{ request.company.company_name }}({{ request.company.email }})</td>
+                        <td data-label="Start Time">{{ request.start_time }}</td>
+                        <td data-label="End Time">{{ request.end_time }}</td>
+                        <td data-label="Booking Date">{{ request.booking_date }}</td>
+                        <td data-label="Status">{{ request.status }}</td>
+                        <td data-label="Actions">
+                            <a href="{% url 'training_update_booking_status' request.id 'accept' %}" class="button">Accept</a> |
+                            <a href="{% url 'training_update_booking_status' request.id 'reject' %}" class="button" style="background-color: #e74c3c;">Reject</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No pending booking requests.</p>
+    {% endif %}
+    
+</body>
+</html>

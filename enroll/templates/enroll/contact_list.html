@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact List</title>
+    <style>
+        /* General Reset */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #075E54, #48A999); /* Gradient background */
+            color: #333;
+        }
+
+        /* Header Section */
+        .contact-header {
+            display: flex;
+            align-items: center;
+            background: linear-gradient(90deg, #075E54, #48A999);
+            color: white;
+            padding: 15px 20px;
+            font-size: 24px;
+            font-weight: bold;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .back-button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            margin-right: 15px;
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out, color 0.3s;
+        }
+
+        .back-button:hover {
+            transform: scale(1.1);
+            color: #d9fdd3;
+        }
+
+        /* Contact List Container */
+        .contact-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: linear-gradient(135deg, #e3f7f5, #f0faf9); /* Gradient for the container */
+            box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+            border-radius: 12px;
+            overflow: hidden;
+            padding: 15px 0; /* Add inner spacing */
+        }
+
+        /* Contact Items */
+        .contact-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid #ddd;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .contact-item:last-child {
+            border-bottom: none; /* Remove border from the last item */
+        }
+
+        .contact-item:hover {
+            background: #f7f9f9;
+            transform: translateY(-2px);
+        }
+
+        .contact-icon {
+            font-size: 32px;
+            margin-right: 15px;
+        }
+
+        .contact-details {
+            flex: 1;
+        }
+
+        .contact-link {
+            text-decoration: none;
+            color: #075E54;
+            font-weight: bold;
+            font-size: 18px;
+            display: block;
+            transition: color 0.3s;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .contact-link:hover {
+            text-decoration: underline;
+            color: #48A999;
+        }
+
+        .contact-name {
+            margin-right: 5px;
+        }
+
+        .contact-type {
+            font-size: 14px;
+            color: #555;
+            font-style: italic;
+        }
+
+        /* Empty Message Styling */
+        .empty-message {
+            text-align: center;
+            color: #777;
+            padding: 30px;
+            font-size: 18px;
+            font-style: italic;
+        }
+
+        /* Gradient Divider */
+        .gradient-divider {
+            height: 4px;
+            background: linear-gradient(90deg, #48A999, #075E54);
+            margin: 10px 0;
+        }
+
+        /* Additional Styling */
+        .contact-icon {
+            font-size: 28px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid #ddd;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            background: #f7f9f9;
+            color: #075E54;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Contact Header with Back Button -->
+    <div class="contact-header">
+        <button class="back-button" onclick="window.history.back()">←</button>
+        Contact List
+    </div>
+
+    <!-- Divider Line with Gradient -->
+    <div class="gradient-divider"></div>
+
+    <!-- Contact List Container -->
+    <div class="contact-container">
+        {% for contact in contact_list %}
+            <div class="contact-item">
+                <!-- Contact Icon -->
+                <div class="contact-icon">
+                    {% if contact.type == 'freelancer' %}
+                        👤 <!-- Freelancer Icon -->
+                    {% else %}
+                        🏢 <!-- Company Icon -->
+                    {% endif %}
+                </div>
+
+                <!-- Contact Details -->
+                <div class="contact-details">
+                    <a class="contact-link" href="{% if contact.type == 'freelancer' %}
+                                                    {% url 'chat_with_contact' contact.id 'freelancer' %}
+                                                  {% else %}
+                                                    {% url 'chat_with_contact' contact.id 'company' %}
+                                                  {% endif %}">
+                        <span class="contact-name">{{ contact.name }}</span>
+                        <span class="contact-type">({{ contact.type|capfirst }})</span>
+                    </a>
+                </div>
+            </div>
+        {% empty %}
+            <p class="empty-message">No contacts found.</p>
+        {% endfor %}
+    </div>
+</body>
+</html>

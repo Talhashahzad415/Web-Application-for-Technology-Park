@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat with {{ contact_name }}</title>
+    <style>
+        /* General Reset */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #00796b, #48a999); /* Page Background Gradient */
+            color: #333;
+        }
+
+        .chat-container {
+            max-width: 600px;
+            margin: 20px auto;
+            height: calc(100vh - 40px);
+            display: flex;
+            flex-direction: column;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .chat-header {
+            background: linear-gradient(90deg, #00796b, #48a999);
+            color: white;
+            padding: 15px 20px;
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .back-button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 22px;
+            cursor: pointer;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            transition: color 0.3s, transform 0.2s;
+        }
+
+        .back-button:hover {
+            transform: scale(1.1);
+            color: #cce8e3;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background: linear-gradient(180deg, #f0f8f7, #e6f3f1); /* Gradient background for message area */
+        }
+
+        .message {
+            margin-bottom: 15px;
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: 15px;
+            position: relative;
+            font-size: 15px;
+            display: flex;
+            flex-direction: column;
+            word-wrap: break-word;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .message.sent {
+            background: linear-gradient(135deg, #ffffff, #f9f9f9);
+            color: #333;
+            margin-left: auto;
+            border: 1px solid #ddd;
+        }
+
+        .message.received {
+            background: linear-gradient(135deg, #d4f8d4, #9fe79f);
+            color: #2d572c;
+            margin-right: auto;
+            border: 1px solid #b8e4b8;
+        }
+
+        .message-text {
+            margin: 0 0 8px;
+        }
+
+        .message-time {
+            font-size: 12px;
+            color: #555;
+            text-align: right;
+            align-self: flex-end;
+        }
+
+        .chat-input-container {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background: linear-gradient(90deg, #f5f5f5, #e8e8e8); /* Gradient for input area */
+            border-top: 1px solid #ddd;
+            box-shadow: 0px -2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            font-size: 15px;
+            outline: none;
+            transition: box-shadow 0.2s, border-color 0.2s;
+        }
+
+        .chat-input:focus {
+            box-shadow: 0px 0px 6px rgba(0, 121, 107, 0.5);
+            border-color: #48a999;
+        }
+
+        .chat-send-btn {
+            background: linear-gradient(135deg, #00796b, #48a999);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin-left: 10px;
+            border-radius: 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .chat-send-btn:hover {
+            background: linear-gradient(135deg, #005e4f, #389e8a);
+            transform: scale(1.05);
+        }
+
+        .no-messages {
+            text-align: center;
+            color: #757575;
+            margin-top: 50px;
+            font-size: 16px;
+            font-style: italic;
+        }
+
+        /* Scrollbar Styling for Chat */
+        .chat-messages::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: #e6f3f1;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: #48a999;
+            border-radius: 8px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb:hover {
+            background: #00796b;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <!-- Chat Header -->
+        <header class="chat-header">
+            <button class="back-button" onclick="window.history.back()">←</button>
+            <h2 class="chat-title">{{ contact_name }}</h2>
+        </header>
+        
+        <!-- Chat Messages Section -->
+        <div class="chat-messages">
+            {% for message in messages %}
+            <div class="message 
+                {% if user_is_freelancer %}
+                    {% if message.sender_freelancer and message.sender_freelancer.id == user_id %}
+                        sent
+                    {% elif message.sender_company and message.sender_company.id == user_id %}
+                        sent
+                    {% else %}
+                        received
+                    {% endif %}
+                {% else %}
+                    {% if message.sender_company and message.sender_company.id == user_id %}
+                        sent
+                    {% elif message.sender_freelancer and message.sender_freelancer.id == user_id %}
+                        sent
+                    {% else %}
+                        received
+                    {% endif %}
+                {% endif %}
+            ">
+                <p class="message-text">{{ message.body }}</p>
+                <span class="message-time">{{ message.timestamp|date:"H:i" }}</span>
+            </div>
+            {% empty %}
+                <p class="no-messages">No messages yet. Start the conversation!</p>
+            {% endfor %}
+        </div>
+        
+        <!-- Chat Input Section -->
+        <form class="chat-input-container" method="post">
+            {% csrf_token %}
+            <textarea name="message" class="chat-input" placeholder="Type a message..." required></textarea>
+            <button type="submit" class="chat-send-btn">Send</button>
+        </form>
+    </div>
+</body>
+</html>

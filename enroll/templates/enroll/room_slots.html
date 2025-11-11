@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>room slots</title>
+</head>
+
+<h1>Training Room {{ room.room_number }} Details</h1>
+<p>Available From: {{ room.available_from }}</p>
+<p>Available To: {{ room.available_to }}</p>
+<p>Booking Duration: {{ room.booking_duration|floatformat:0 }} hours</p>
+<p>Date: {{ current_date }}</p>
+
+<h2>Time Slots</h2>
+<table>
+    <tr>
+        <th>Start Time</th>
+        <th>End Time</th>
+        <th>Status</th>
+    </tr>
+    {% for slot in slot_status %}
+    <tr>
+        <td>{{ slot.start }}</td>
+        <td>{{ slot.end }}</td>
+        <td>{{ slot.status }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+    
+
+</body>
+
+</html>

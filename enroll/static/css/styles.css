@@ -1,0 +1,148 @@
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f5f5f5;
+    margin: 0;
+}
+.container {
+    max-width: 500px;
+    margin: 36px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+.header {
+    display: flex;
+    align-items: center; /* Align items vertically */
+}
+
+.logo {
+    width: 81px;
+    margin-right: 5px;
+}
+
+h1 {
+    color: #6484d0;
+    font-size: 25px;
+    font-style: normal;
+    font-family: math;
+    margin: 5px;
+    margin-right: 40px;
+    text-align: center;
+}
+h2 {
+    text-align: center;
+    margin-left: 35px;
+    font-size: 1.5em;
+    font-weight: 300;
+    color: #32c5d2;
+    font-family: "Open Sans",
+    sans-serif;
+}
+form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.input-group {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.input-group i {
+    position: absolute;
+    top: 13px;
+    right: 15px;
+    color: #999;
+    cursor: pointer;
+}
+
+input {
+    width: 90%;
+    height: 40px;
+    background: transparent;
+    border: 1px solid #ccc;
+    transition: all .3s ease;
+    padding: 0 40px 0 15px;
+    font-size: 16px;
+    border-radius: 10px;
+}
+
+label {
+    position: absolute;
+    cursor: text;
+    z-index: 2;
+    top: 13px;
+    left: 15px;
+    font-size: 16px;
+    background-color: white;
+    padding: 0 5px;
+    color: #999;
+    transition: all .3s ease;
+}
+
+input:focus + label,
+input:valid + label {
+    font-size: 12px;
+    top: -10px;
+    left: 10px;
+    color: blue;
+}
+
+input:focus {
+    border-color: blue;
+    outline: none;
+}
+
+button {
+    margin-top: 15px;
+    width: 100%;
+    padding: 10px;
+    background-color: #34d1ce;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #35e5e8;
+}
+
+.portal-list {
+    list-style: inherit;
+    padding: 0;
+    margin-left: 33px;
+    margin-top: 32px;
+}
+
+.portal-list li {
+    color: #337ab7;
+    font-family: math;
+    font-size: 21px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.portal-list li a {
+    color: #337ab7;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.portal-list li a:hover {
+    text-decoration: none;
+}
+hr {
+    background-color: magenta;
+    height: 1px;
+    width: 100%;
+}
+

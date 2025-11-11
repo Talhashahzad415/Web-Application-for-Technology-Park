@@ -1,0 +1,213 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <title>{{ portfolio.name }} Portfolio</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to right, #e0eafc, #cfdef3);
+            color: #333;
+        }
+
+        .cv-container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: #fff;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+        }
+
+        .cv-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .profile-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #00aaff;
+            margin-bottom: 20px;
+            transition: transform 0.4s ease;
+        }
+
+        .profile-image:hover {
+            transform: scale(1.1);
+        }
+
+        .cv-header h1 {
+            font-size: 2.8em;
+            margin: 0;
+            color: #00aaff;
+        }
+
+        .cv-header p {
+            font-size: 1.3em;
+            color: #666;
+        }
+
+        .cv-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f7f9fc;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .cv-section h2 {
+            font-size: 1.8em;
+            color: #00aaff;
+            border-bottom: 2px solid #ececec;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .cv-section h2 i {
+            margin-right: 15px;
+            color: #00aaff;
+        }
+
+        .cv-section p {
+            font-size: 1.2em;
+            line-height: 1.6em;
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        /* Skills Section */
+        .skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .skill-item {
+            background-color: #00aaff;
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+
+        .skill-item:hover {
+            background-color: #007acc;
+        }
+
+        .contact-info {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .btn-contact {
+            background-color: #00aaff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1.2em;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .btn-contact:hover {
+            background-color: #007acc;
+            transform: scale(1.05);
+        }
+
+        .footer {
+            margin-top: 50px;
+            text-align: center;
+            color: #aaa;
+            font-size: 0.9em;
+        }
+
+        .footer a {
+            color: #00aaff;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="cv-container">
+    <!-- CV Header -->
+    <div class="cv-header">
+        <img src="{% static 'images/avatar.png' %}" alt="Profile Image" class="profile-image">
+        <h1>{{ company_name }} Portfolio</h1>
+        <p>Company Profile & Achievements</p>
+    </div>
+
+    <!-- Personal Information Section -->
+    <div class="cv-section">
+        <h2><i class="fas fa-id-card icon"></i> Contact Information</h2>
+        <ul>
+            <li><span>Name:</span> {{ portfolio.name }}</li>
+            <li><span>Email:</span> {{ portfolio.email }}</li>
+            <li><span>Phone:</span> {{ portfolio.phone }}</li>
+            <li><span>Website:</span> {{ portfolio.website }}</li>
+        </ul>
+    </div>
+
+    <!-- Professional Summary Section -->
+    <div class="cv-section">
+        <h2><i class="fas fa-briefcase icon"></i> Company Summary</h2>
+        <p>{{ portfolio.summary }}</p>
+    </div>
+
+    <!-- Services Section -->
+    <div class="cv-section">
+        <h2><i class="fas fa-briefcase icon"></i> Services</h2>
+        <p>{{ portfolio.services }}</p>
+    </div>
+
+    <!-- Projects Section -->
+    <div class="cv-section">
+        <h2><i class="fas fa-project-diagram icon"></i> Projects</h2>
+        <p>{{ portfolio.projects }}</p>
+    </div>
+
+    <!-- Awards Section -->
+    <div class="cv-section">
+        <h2><i class="fas fa-trophy icon"></i> Awards and Recognitions</h2>
+        <p>{{ portfolio.awards }}</p>
+    </div>
+
+    <!-- Contact Section -->
+    <div class="cv-section">
+        <h2><i class="fas fa-envelope-open icon"></i> Additional Contact Information</h2>
+        <p>{{ portfolio.contact }}</p>
+    </div>
+
+    <!-- Contact Me Section -->
+    <div class="contact-info">
+        <button class="btn-contact">Contact Us</button>
+    </div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+    <p>&copy; 2024 {{ company_name }}. All Rights Reserved.</p>
+    <p><a href="#">LinkedIn</a> | <a href="#">GitHub</a> | <a href="#">Twitter</a></p>
+</div>
+
+<!-- FontAwesome Icons -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</body>
+</html>

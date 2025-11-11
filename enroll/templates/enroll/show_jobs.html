@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Listings</title>
+    <style>
+        /* General Reset */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(120deg, #f4f6f9, #e1e9f2);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        /* Container for Cards */
+        .cards-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 20px;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        /* Individual Card Styling */
+        .card {
+            background: #fff;
+            width: 80%;
+            min-width: 280px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-top: 4px solid #007BFF;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Card Header */
+        .card-header {
+            background: linear-gradient(120deg, #0245A4, #A0D4FF);
+            color: white;
+            padding: 20px;
+            font-size: 1.8em;
+            text-align: center;
+            border-bottom: 4px solid #007BFF;
+            position: relative;
+        }
+
+        /* Card Content */
+        .card-content {
+            padding: 20px;
+        }
+
+        .card-content p {
+            margin: 10px 0;
+            font-size: 1em;
+            color: #333;
+        }
+
+        /* Job Description */
+        .job-description {
+            max-height: 3.75em; /* 2.5 lines (line-height of 1.5em) */
+            overflow: hidden;
+            position: relative;
+            transition: max-height 0.3s ease;
+        }
+
+        .job-description.expanded {
+            max-height: none; /* Show all lines when expanded */
+        }
+
+        .toggle-description {
+            color: #007BFF;
+            cursor: pointer;
+            font-size: 0.9em;
+            margin-top: 5px;
+            display: none; /* Hide by default */
+            font-weight: bold;
+        }
+
+        /* Highlighted Info */
+        .highlight-salary {
+            font-weight: bold;
+            color: #28a745;
+            font-size: 1.2em;
+        }
+
+        .highlight-job-type {
+            background-color: #0245A4;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: inline-block;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        /* Apply Button */
+        a {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 15px;
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        a:hover {
+            background-color: #0056b3;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .card {
+                width: 48%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .card {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="cards-container">
+        {% for job_dict in job_list %}
+        <div class="card">
+            <div class="card-header">
+                {{ job_dict.job.job_title }}
+            </div>
+            <div class="card-content">
+                <p><strong>Posted:</strong> {{ job_dict.time_ago }}</p>
+                <p><strong>Number of People:</strong> {{ job_dict.job.num_people }}</p>
+                <p><strong>Qualifications:</strong> {{ job_dict.job.qualifications }}</p>
+                <p><strong>Job Type:</strong> <span class="highlight-job-type">{{ job_dict.job.job_type }}</span></p>
+                
+                <div class="job-description" id="description-{{ forloop.counter }}">
+                    <p><strong>Job Description:</strong> {{ job_dict.job.job_description }}</p>
+                </div>
+                <span class="toggle-description" id="toggle-{{ forloop.counter }}" onclick="toggleDescription({{ forloop.counter }})">See more</span>
+
+                <p><strong>Salary:</strong> <span class="highlight-salary">${{ job_dict.job.salary }}</span></p>
+                <p><strong>Skills:</strong> {{ job_dict.job.skills }}</p>
+                <a href="{% url 'apply_for_job' job_dict.job.id %}">Apply</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <script>
+        // JavaScript function to toggle job description visibility
+        function toggleDescription(index) {
+            const description = document.getElementById(`description-${index}`);
+            const toggleLink = document.getElementById(`toggle-${index}`);
+            
+            description.classList.toggle('expanded');
+            if (description.classList.contains('expanded')) {
+                toggleLink.textContent = 'See less';
+            } else {
+                toggleLink.textContent = 'See more';
+            }
+        }
+
+        // Show the toggle link only if the description is longer than 2.5 lines
+        document.querySelectorAll('.job-description').forEach((description, index) => {
+            const lineHeight = parseInt(window.getComputedStyle(description).lineHeight);
+            const maxHeight = 2.5 * lineHeight; // 2.5 lines
+            if (description.scrollHeight > maxHeight) {
+                description.classList.remove('expanded'); // Start collapsed
+                const toggleLink = document.getElementById(`toggle-${index + 1}`);
+                toggleLink.style.display = 'inline'; // Show the toggle link
+            }
+        });
+    </script>
+</body>
+</html>

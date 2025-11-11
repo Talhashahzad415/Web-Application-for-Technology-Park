@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Room</title>
+    <style>
+        /* Resetting basic styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .form-container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            max-width: 100%;
+        }
+
+        h4 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.8rem;
+            color: #0245A4;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 1rem;
+            background-color: #f9f9f9;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: #0245A4;
+            outline: none;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            background-color: #0245A4;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #FFC07C;
+            color: #0245A4;
+        }
+
+        .btn-container a {
+            text-decoration: none;
+            background-color: #ccc;
+            padding: 12px 20px;
+            color: white;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+        }
+
+        .btn-container a:hover {
+            background-color: #333;
+        }
+
+        .form-group .error {
+            color: #dc3545;
+            font-size: 0.9rem;
+        }
+
+        /* Media query for mobile responsiveness */
+        @media (max-width: 768px) {
+            .form-container {
+                width: 100%;
+                padding: 20px;
+            }
+
+            h4 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h4>Update Room {{ form.number.value }}</h4>
+        <form action="" method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="number">{{ form.number.label }}</label>
+                {{ form.number }}
+                <span class="error">{{ form.number.errors }}</span>
+            </div>
+            <div class="form-group">
+                <label for="status">{{ form.status.label }}</label>
+                <select name="status" id="status-select" required>
+                    <option value="Available" {% if form.status.value == "Available" %}selected{% endif %}>Available</option>
+                    <option value="Booked" {% if form.status.value == "Booked" %}selected{% endif %}>Booked</option>
+                </select>
+                <span class="error">{{ form.status.errors }}</span>
+            </div>
+            <div class="form-group">
+                <label for="details">{{ form.details.label }}</label>
+                {{ form.details }}
+                <span class="error">{{ form.details.errors }}</span>
+            </div>
+            
+            <!-- Assuming booked_by field is available in the form -->
+            <div class="form-group" id="booked-by-group">
+                <label for="booked_by">{{ form.booked_by.label }}</label>
+                {{ form.booked_by }}
+                <span class="error">{{ form.booked_by.errors }}</span>
+            </div>
+            
+            <div class="btn-container">
+                <button type="submit" class="btn">Update</button>
+                <a href="{% url 'addandshow' %}" class="btn">Back to Home</a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const statusSelect = document.getElementById("status-select");
+            const bookedByInput = document.getElementById("id_booked_by"); // Django typically prefixes input IDs with "id_"
+            
+            function updateBookedBy() {
+                if (statusSelect.value === "Available") {
+                    bookedByInput.value = "None";  // Set to "None" when status is "Available"
+                }
+            }
+
+            statusSelect.addEventListener("change", updateBookedBy);
+            updateBookedBy();  // Run on load to handle initial value
+        });
+    </script>
+</body>
+</html>

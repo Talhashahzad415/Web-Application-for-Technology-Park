@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Room List</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f0f2f5;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #0245A4;
+            margin-bottom: 30px;
+            border-bottom: 3px dotted #0245A4;
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .card {
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #e1e1e1;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .card h3 {
+            font-size: 1.75rem;
+            color: #0245A4;
+            margin-bottom: 10px;
+            border-bottom: 2px solid #e1e1e1;
+            padding-bottom: 10px;
+        }
+
+        .card p {
+            font-size: 1rem;
+            margin-bottom: 15px;
+            color: #666;
+        }
+        
+        /* Additional styling for status indicator */
+        .status {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            margin-bottom: 15px; /* Increased margin to separate from the following content */
+            display: inline-block; /* Make status a block-level element for better spacing */
+            width: fit-content; /* Adjust width to fit content */
+        }
+        
+        /* Status background colors */
+        .status-available {
+            background-color: #28a745; /* Green */
+        }
+        
+        .status-booked {
+            background-color: #dc3545; /* Red */
+        }
+        /* Responsive design */
+        @media only screen and (max-width: 768px) {
+            .card-container {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                width: 90%;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Rooms List</h1>
+    <!-- Room List -->
+    <div class="card-container">
+        {% for room in rooms %}
+        <div class="card">
+            <h3>Room {{ room.number }}</h3>
+            <p>Status: 
+                <span class="status {% if room.status == 'Available' %}status-available{% else %}status-booked{% endif %}">
+                    {{ room.status }}
+                </span>
+            </p>
+            <p>Details: {{ room.details }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

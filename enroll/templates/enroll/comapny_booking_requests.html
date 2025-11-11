@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Booking Requests</title>
+    <link rel="stylesheet" href="{% static 'css/admin_booking_requests.css' %}">
+    <!-- Add any other CSS files you need -->
+</head>
+<body>
+    <div class="container">
+        <h1>Booking Requests</h1>
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Room</th>
+                    <th>Company</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for request in booking_requests %}
+                    <tr>
+                        <td>{{ request.room.number }}</td>
+                        <td>{{ request.company.company_name }}</td>
+                        <td>{{ request.status }}</td>
+                        <td>
+                            {% if request.status == 'pending' %}
+                                <form method="POST" action="{% url 'approve_booking_request' request.id %}" style="display:inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn approve">Approve</button>
+                                </form>
+                                <form method="POST" action="{% url 'reject_booking_request' request.id %}" style="display:inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn reject">Reject</button>
+                                </form>
+                            {% else %}
+                                <span class="status">{{ request.status }}</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4">No booking requests available.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

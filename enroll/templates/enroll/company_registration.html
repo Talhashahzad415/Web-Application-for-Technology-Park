@@ -1,0 +1,285 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f5f5f5;
+            margin-top:2%;
+        }
+        .container {
+            max-width: 500px;
+            margin: 36px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            display: flex;
+            align-items: center;
+        }
+        .logo {
+            width: 81px;
+            margin-right: 5px;
+        }
+        h1 {
+            color: #6484d0;
+            font-size: 25px;
+            font-family: math;
+            margin: 5px;
+            margin-right: 40px;
+            text-align: center;
+        }
+        h2 {
+            text-align: center;
+            margin-left: 35px;
+            font-size: 1.5em;
+            font-weight: 300;
+            color: #32c5d2;
+            font-family: "algerian";
+        }
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .input-group i {
+    position: absolute;
+    top: 13px;
+    right: 0px;
+    color: black;
+    cursor: pointer;
+    
+}
+        input {
+            width: 100%;
+            height: 40px;
+            background: transparent;
+            border: 1px solid #ccc;
+            transition: all .3s ease;
+            padding: 0 15px;
+            font-size: 16px;
+            border-radius: 10px;
+            
+        }
+        label {
+            position: absolute;
+            top: 13px;
+            left: 15px;
+            font-size: 16px;
+            background-color: white;
+            padding: 0 5px;
+            color: #999;
+            transition: all 0.3s ease;
+        }
+        /* Floating label effect */
+        input:focus + label,
+        input:valid + label,
+        input:not(:placeholder-shown) + label {
+            font-size: 12px;
+            top: -10px;
+            left: 10px;
+            color: blue;
+        }
+        input:focus {
+            border-color: blue;
+            outline: none;
+        }
+        #login {
+            margin-right: 180px;
+            margin-top: 14px;
+            color: white;
+        }
+        /* Autofill detection */
+        input:-webkit-autofill + label {
+            font-size: 12px;
+            top: -10px;
+            left: 10px;
+            color: blue;
+        }
+        .input-group i.focused {
+            color: blue; /* Change the icon color on input focus */
+        }
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        button {
+            margin-top: 15px;
+            width: 100%;
+            padding: 10px;
+            background-color: #34d1ce;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover{
+            background-color: #35e5e8;
+        }
+        
+        .portal-list {
+            list-style: inherit;
+            padding: 0;
+            margin-left: 33px;
+            margin-top: 32px;
+        }
+        .portal-list li {
+            color: #337ab7;
+            font-family: math;
+            font-size: 21px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        .portal-list li a {
+            color: #337ab7;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .portal-list li a:hover {
+            text-decoration: none;
+        }
+        hr {
+            background-color: magenta;
+            height: 1px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="{% static 'images/SCO_New_Logo.png' %}" alt="Logo" class="logo">
+            <img src="{% static 'images/University_of_Poonch_logo.png' %}" alt="Logo" class="logo">
+            <h1>SCO Software Technology Park Website</h1>
+        </div>
+        <h2>Comapny Registration</h2>
+
+        <!-- Error message block -->
+        {% if form.errors %}
+    <div class="error-message">
+        <ul>
+            {% for field in form %}
+                {% if field.errors %}
+                    <li>{{ field.label }}: {{ field.errors|striptags }}</li>
+                {% endif %}
+            {% endfor %}
+            {% if form.non_field_errors %}
+                <li>{{ form.non_field_errors|striptags }}</li>
+            {% endif %}
+        </ul>
+    </div>
+{% endif %}
+
+<form method="POST">
+    {% csrf_token %}
+    <!-- Company Name -->
+    <div class="input-group">
+        <input type="text" name="company_name" placeholder=" " required id="id_company_name">
+        <label for="id_company_name">Company Name*</label>
+        <i class="fas fa-building icon"></i>
+    </div>
+
+    <!-- Email -->
+    <div class="input-group">
+        <input type="email" name="email" placeholder=" " required id="id_email">
+        <label for="id_email">Email*</label>
+        <i class="fas fa-envelope icon"></i>
+    </div>
+
+    <!-- Phone Number -->
+    <div class="input-group">
+        <input type="tel" name="phone_number" placeholder=" " required id="id_phone_number" pattern="[0-9]{10,15}">
+        <label for="id_phone_number">Phone Number*</label>
+        <i class="fas fa-phone icon"></i>
+    </div>
+
+    <!-- Password -->
+    <div class="input-group">
+        <input type="password" name="password" placeholder=" " required id="id_password">
+        <label for="id_password">Password*</label>
+        <i class="fas fa-eye" id="togglePassword"></i>
+    </div>
+
+    <!-- Address -->
+    <div class="input-group">
+        <input type="text" name="address" placeholder=" " required id="id_address">
+        <label for="id_address">Address*</label>
+        <i class="fas fa-map-marker-alt icon"></i>
+    </div>
+
+    <!-- Industry -->
+    <div class="input-group">
+        <input type="text" name="industry" placeholder=" " required id="id_industry">
+        <label for="id_industry">Industry*</label>
+        <i class="fas fa-industry icon"></i>
+    </div>
+
+    <!-- Number of Employees -->
+    <div class="input-group">
+        <input type="number" name="number_of_employees" placeholder=" " required id="id_number_of_employees" min="1">
+        <label for="id_number_of_employees">Number of Employees*</label>
+        <i class="fas fa-users icon"></i>
+    </div>
+
+    <!-- Submit Button -->
+    <button type="submit" class="submit-button">Apply</button>
+</form>
+       
+        <hr>
+    </div>
+    <script>
+        const togglePassword = document.querySelector('#togglePassword');
+        const password = document.querySelector('#id_password');
+
+        togglePassword.addEventListener('click', function () {
+            // Toggle the type attribute
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+            
+            // Toggle the eye icon
+            this.classList.toggle('fa-eye-slash');
+        });
+
+    const emailInput = document.querySelector('#id_email');
+    const emailIcon = document.querySelector('.fa-envelope');
+
+    const passwordInput = document.querySelector('#id_password');
+    const passwordIcon = document.querySelector('#togglePassword');
+
+    // Add focus event listeners to the input fields
+    emailInput.addEventListener('focus', function () {
+        emailIcon.classList.add('focused'); // Add green color to email icon
+    });
+
+    emailInput.addEventListener('blur', function () {
+        emailIcon.classList.remove('focused'); // Remove green color from email icon
+    });
+
+    passwordInput.addEventListener('focus', function () {
+        passwordIcon.classList.add('focused'); // Add green color to password icon
+    });
+
+    passwordInput.addEventListener('blur', function () {
+        passwordIcon.classList.remove('focused'); // Remove green color from password icon
+    });
+    </script>
+</body>
+</html>

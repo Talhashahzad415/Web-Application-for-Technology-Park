@@ -1,0 +1,937 @@
+{% load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Dashboard</title>
+    <!-- ======= Styles ====== -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- ====== ionicons ======= -->
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <style>
+        /* =========== Google Fonts ============ */
+
+* {
+  font-family: "Ubuntu", sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --blue: #2a2185;
+  --white: #fff;
+  --gray: #f5f5f5;
+  --black1: #222;
+  --black2: #999;
+  --green: #24c146;
+}
+
+body {
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.container {
+  display: flex;
+  width: 100%;
+}
+
+/* =============== Navigation ================ */
+.navigation {
+  margin-top:60px;
+  position: fixed;
+  width: 300px;
+  height: 100%;
+  background: linear-gradient(to bottom, #92736c, #5e2e2a);
+  border-left: 10px solid var(--blue);
+  transition: width 0.5s ease;
+  overflow: hidden;
+  box-shadow: 10px 0px 20px rgba(0, 0, 0, 0.2); /* Adds a shadow for depth */
+}
+
+.navigation.active {
+  width: 80px;
+}
+
+.navigation ul {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.navigation ul li {
+  position: relative;
+  width: 100%;
+  list-style: none;
+  border-top-left-radius: 30px;
+  border-bottom-left-radius: 30px;
+}
+
+.navigation ul li:hover,
+.navigation ul li.hovered {
+  background-color: var(--white);
+}
+
+.navigation ul li:nth-child(1) {
+  margin-bottom: 40px;
+  pointer-events: none;
+}
+
+.navigation ul li a {
+  position: relative;
+  display: block;
+  width: 100%;
+  display: flex;
+  text-decoration: none;
+  color: var(--white);
+}
+.navigation ul li:hover a,
+.navigation ul li.hovered a {
+  color: var(--blue);
+}
+
+.navigation ul li a .icon {
+  position: relative;
+  display: block;
+  min-width: 60px;
+  height: 60px;
+  line-height: 75px;
+  text-align: center;
+  font-size: 1.75rem;
+  transform: perspective(400px) translateZ(20px) rotateX(5deg) rotateY(5deg);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+.navigation ul li a .icon ion-icon {
+  font-size: 1.75rem;
+}
+
+.navigation ul li a .title {
+  position: relative;
+  display: block;
+  padding: 0 10px;
+  height: 60px;
+  line-height: 60px;
+  text-align: start;
+  white-space: nowrap;
+}
+
+/* --------- curve outside ---------- */
+.navigation ul li:hover a::before,
+.navigation ul li.hovered a::before {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: -50px;
+  width: 50px;
+  height: 50px;
+  background-color: transparent;
+  border-radius: 50%;
+  box-shadow: 35px 35px 0 10px var(--white);
+  pointer-events: none;
+}
+.navigation ul li a .icon:hover {
+  transform: perspective(400px) translateZ(30px) rotateX(0deg) rotateY(0deg) scale(1.1);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+}
+.navigation ul li:hover a::after,
+.navigation ul li.hovered a::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: -50px;
+  width: 50px;
+  height: 50px;
+  background-color: transparent;
+  border-radius: 50%;
+  box-shadow: 35px -35px 0 10px var(--white);
+  pointer-events: none;
+}
+
+.main {
+  overflow: auto;
+  position: relative; /* Changed to relative */
+  width: calc(100% - 300px);
+  left: 300px;
+  min-height: calc(100vh - 60px - 50px); /* Adjust for top bar and footer height */
+  background: var(--white);
+  transition: 0.5s;
+  padding-bottom: 60px; /* Add padding to avoid overlap with footer */
+}
+
+footer {
+  position: relative; /* Changed to relative */
+  color: black;
+  text-align: center;
+  padding: 10px 0;
+  width: 100%;
+  z-index: 10; /* Ensure it's above other elements */
+}
+.main.active {
+  width: calc(100% - 80px);
+  left: 80px;
+}
+
+.topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background:linear-gradient(to bottom, #92736c, #5e2e2a);
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  z-index: 1000;
+}
+
+.toggle {
+  color:  white;
+  position: relative;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2.5rem;
+  cursor: pointer;
+}
+
+.dashboard-title {
+  font-family: "Algerian";
+  font-size: 24px;
+  font-weight: lighter;
+  color: white;
+  text-align: center;
+  flex-grow: 1;
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.username {
+  font-size: 17px;
+  color: white;
+  margin: 0;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.dropdown {
+  position: relative;
+}
+
+.dropdown-icon {
+  font-size: 20px;
+  color: white;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.dropdown-menu {
+  display: none; /* Initially hidden */
+  position: absolute;
+  top: 55px;
+  width:120px;
+  right: -10px;
+  background: linear-gradient(to bottom, #92736c, #5e2e2a);
+  border-radius: 4px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.dropdown-menu li {
+  list-style: none;
+}
+
+.dropdown-menu li a {
+  color: white;
+  text-decoration: none;
+  display: block;
+  padding: 8px;
+}
+.dropdown-menu li a:hover {
+  background: linear-gradient(to bottom, #92736c, #5e2e2a);
+}
+
+.dropdown.active .dropdown-icon {
+  transform: rotate(180deg);
+}
+
+.dropdown.active .dropdown-menu {
+  display: block;
+}
+
+
+.logo img {
+  background-color: white;
+  border-radius: 20%;
+  border: none;
+  width: 55px;
+  margin-left: 11px;
+  margin-top: 10px;
+}
+.sco{
+    height: 58px;
+}
+
+main {
+  margin-top:90px;
+  padding: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+section.card {
+  background: linear-gradient(to bottom, #92736c, #5e2e2a);
+  margin: 15px;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3), 0 6px 6px rgba(0, 0, 0, 0.23); /* Enhanced shadow for 3D effect */
+  transform: perspective(1000px) rotateX(1deg) rotateY(2deg); /* Subtle 3D transformation */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth animation */
+  flex: 1 1 calc(33% - 40px);
+  max-width: calc(36% - 40px);
+}
+section.card:hover {
+  transform: perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1.05); /* Lift and slightly rotate on hover */
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5), 0 10px 10px rgba(0, 0, 0, 0.25); /* Darker shadow on hover */
+}
+
+
+
+h2 {
+  margin-top: 0;
+  color: white;
+  display: flex;
+  align-items: center;
+}
+
+h2 i {
+  margin-right: 10px;
+}
+
+label {
+  display: block;
+  margin-top: 10px;
+  color: #666;
+}
+
+input, textarea, button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+textarea {
+  resize: vertical;
+}
+
+button {
+  display: block;
+  width: 100%;
+  padding: 12px 40px;
+  margin-top: 10px;
+  background: linear-gradient(to right, #6a82fb, #fc5c7d);
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.3s;
+}
+
+button:hover {
+  background: linear-gradient(to right, #fc5c7d, #6a82fb);
+  transform: translateY(-3px); /* Lift effect */
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Gradient background hover effect */
+button:active {
+  transform: translateY(2px); /* Slight press-down effect */
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Button group styling */
+.button-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.button-group button {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.button-group button:last-child {
+  margin-bottom: 0;
+}
+
+/* Link styling */
+.link {
+  text-decoration: none;
+  color: white;
+}
+
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1000; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgba(0, 0, 0, 0.6); /* Darker background for more focus */
+  display: flex; /* Flex to center content */
+  justify-content: center; /* Horizontal center */
+  align-items: center; /* Vertical center */
+  transition: opacity 0.4s ease; /* Fade-in effect */
+}
+
+/* Modal content */
+.modal-content {
+  background: linear-gradient(135deg, #ffffff, #f3f4f6);
+  padding: 30px;
+  border-radius: 15px;
+  width: 90%; /* Adjust size as needed */
+  max-width: 500px; /* Max width for larger screens */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); /* Deep shadow for pop effect */
+  position: relative;
+  animation: zoomIn 0.5s ease;
+}
+
+/* Zoom animation */
+@keyframes zoomIn {
+  from {
+      transform: scale(0.9);
+  }
+  to {
+      transform: scale(1);
+  }
+}
+
+/* Close button */
+.modal-content .close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  color: #555;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.modal-content .close:hover,
+.modal-content .close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Modal title */
+.modal-title {
+  font-size: 24px;
+  color: #333;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+/* Modal description */
+.modal-description {
+  color: #666;
+  font-size: 16px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Job posting buttons */
+.modal-content .button.job-link {
+  display: block;
+  width: 100%;
+  padding: 12px 20px;
+  margin-top: 10px;
+  background: linear-gradient(to right, #6a82fb, #fc5c7d);
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background 0.3s, transform 0.3s;
+}
+
+.modal-content .button.job-link:hover {
+  background: linear-gradient(to right, #fc5c7d, #6a82fb);
+  transform: translateY(-3px); /* Lift effect */
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Gradient background hover effect */
+.modal-content .button.job-link:active {
+  transform: translateY(2px); /* Slight press-down effect */
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  section.card {
+    flex: 1 1 calc(50% - 40px);
+    max-width: calc(50% - 40px);
+  }
+  .navigation {
+    left: -300px;
+  }
+  .navigation.active {
+    width: 300px;
+    left: 0;
+  }
+  .main {
+    width: 100%;
+    left: 0;
+  }
+  .main.active {
+    left: 300px;
+  }
+}
+
+@media (max-width: 768px) {
+  section.card {
+    flex: 1 1 calc(100% - 40px);
+    max-width: calc(100% - 40px);
+  }
+
+  .navigation {
+    left: -300px;
+  }
+  .navigation.active {
+    width: 300px;
+    left: 0;
+  }
+  .main {
+    width: 100%;
+    left: 0;
+  }
+
+  .main.active {
+    width: calc(100% - 80px);
+    left: 300px;
+  }
+
+  .dashboard-title {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .topbar {
+    flex-direction: row; /* Ensure elements are in the same row */
+    align-items: center;
+    justify-content: space-between; /* Add space between the elements */
+  }
+
+  .dashboard-title {
+    font-size: 18px;
+    margin-top: 0; /* Remove top margin for alignment */
+    margin-left: 10px; /* Optional: add left margin for spacing */
+  }
+
+  .user {
+    margin-left: auto; /* Pushes the user element to the right */
+  }
+
+  /* Other styles */
+  .main {
+    width: 100%;
+    left: 0;
+  }
+
+  .navigation {
+    width: 100%;
+    left: -100%;
+    z-index: 1000;
+  }
+
+  .navigation.active {
+    width: 100%;
+    left: 0;
+  }
+
+  .toggle {
+    z-index: 10001;
+  }
+
+  .main.active .toggle {
+    color: #fff;
+    position: fixed;
+    right: 0;
+    left: initial;
+  }
+
+  section.card {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+
+  .modal-content {
+    width: 90%;
+  }
+}
+
+    </style>
+</head>
+
+<body>
+  <!-- =============== Navigation ================ -->
+  <div class="container">
+      <div class="navigation">
+          <ul>
+              <li>
+                  <a href="#">
+                      <span class="logo">
+                          <img src="{% static 'images/SCO_New_Logo.png' %}" alt="">
+                      </span>
+                      <span class="logo">
+                          <img src="{% static 'images/University_of_Poonch_logo.png'%}" alt="">
+                      </span>
+                  </a>
+              </li>
+
+              <li>
+                  <a href="{% url 'companydashboard' %}">
+                      <span class="icon">
+                          <ion-icon name="home-outline"></ion-icon>
+                      </span>
+                      <span class="title">Dashboard</span>
+                  </a>
+              </li>
+
+              <li>
+                  <a href="{% url 'portfolio' %}">
+                      <span class="icon">
+                          <ion-icon name="person-outline"></ion-icon>
+                      </span>
+                      <span class="title">Portfolio</span>
+                  </a>
+              </li>
+
+              <!-- Complaint -->
+              <li>
+                  <a href="{% url 'complaint' %}">
+                      <span class="icon">
+                          <ion-icon name="alert-circle-outline"></ion-icon>
+                      </span>
+                      <span class="title">Complaint</span>
+                  </a>
+              </li>
+
+              <!-- Rooms -->
+              <li>
+                  <a href="{% url 'show_rooms' %}">
+                      <span class="icon">
+                          <ion-icon name="business-outline"></ion-icon>
+                      </span>
+                      <span class="title">Rooms</span>
+                  </a>
+              </li>
+              
+              <li>
+                  <a href="{% url 'companyfaq_list' %}">
+                      <span class="icon">
+                          <ion-icon name="help-outline"></ion-icon>
+                      </span>
+                      <span class="title">FAQ</span>
+                  </a>
+              </li>
+
+              <li>
+                <a href="{% url 'show_announcements' %}" id="announcement-link">
+                  <span class="icon">
+                      <ion-icon name="megaphone-outline"></ion-icon>
+                  </span>
+                  <span class="title">Announcements</span>
+              </a>
+              </li>
+          </ul>
+      </div>
+
+      <div class="main">
+          <div class="topbar">
+              <div class="toggle">
+                  <ion-icon name="menu-outline"></ion-icon>
+              </div>
+
+              <div class="dashboard-title">
+                  Company Dashboard
+              </div>
+              <div class="user">
+                <p class="username">Hi, {{ company_name }}</p>
+                <img src="{% static 'images/avatar.png' %}" alt="User Avatar" class="avatar">
+                <div class="dropdown">
+                  <i class="fas fa-chevron-down dropdown-icon"></i>
+                  <ul class="dropdown-menu">
+                    <li><a href="{% url 'company_edit_profile' %}">Edit Profile</a></li>
+                    <li><a href="{%  url 'company_logout' %}">Logout</a></li>
+                  </ul>
+                </div>
+              </div>                
+      
+            
+          </div>
+
+          <main>
+              <section id="room-availability" class="card">
+                  <h2><i class="fas fa-door-open"></i> Room Availability</h2>
+                  <a  class="link" href="{% url 'check_rooms' %}">
+                  <button type="button" onclick="checkRoomAvailability()"><i class="fas fa-search"></i> Check Available Rooms</button>
+                  </a>
+                  <div id="room-availability-result"></div>
+              </section>
+
+              <section id="advertisement-management" class="card">
+                  <h2><i class="fas fa-bullhorn"></i> Job Advertisement</h2>
+                  <form id="ad-management-form">
+                      <a  class="link" href="{% url 'jobcreation' %}">
+                      <button type="button" onclick="manageAds()"><i class="fas fa-paper-plane"></i> Create Job</button>
+                      </a>
+                      
+                  </form>
+              </section>
+
+              <section id="applicant-management" class="card">
+                <h2><i class="fas fa-users"></i> Applications Management</h2>
+                <button type="button" id="review-application-button" class="review-button"><i class="fas fa-check"></i> Review Applications</button>
+            </section>
+            
+            <div id="job-postings-modal" class="modal" style="display: none;">
+              <div class="modal-content">
+                  <span class="close" id="close-modal-btn">&times;</span>
+                  <h2 class="modal-title"><i class="fas fa-briefcase"></i> Review Applications</h2>
+                  <p class="modal-description">Select a job posting below to review applications:</p>
+                  <div id="job-postings-container">
+                      {% for job_posting in job_postings %}
+                      <a href="{% url 'company_applications' job_posting.id %}" class="button job-link">
+                          <i class="fas fa-file-alt"></i> Review Applications for {{ job_posting.job_title }}
+                      </a>
+                      {% endfor %}
+                  </div>
+              </div>
+          </div>
+
+          <section id="room-management" class="card">
+            <h2><i class="fas fa-door-closed"></i> Room Management</h2>
+            <button type="button" id="manage-rooms-company"><i class="fas fa-building"></i> Book Room</button>
+                      <a href="{% url 'show_rooms' %}" id="manage-rooms-company-link" style="display: none;"></a>
+            <button type="button" id="book-room-button" class="review-button"><i class="fas fa-building"></i> Book Training Room</button>
+          </section>
+            
+            <div id="room-management-modal" class="modal" style="display: none;">
+                <div class="modal-content">
+                    <span class="close" id="close-room-modal-btn">&times;</span>
+                    <h2 class="modal-title"><i class="fas fa-door-closed"></i> Book a Room</h2>
+                    <p class="modal-description">Select a room below to book:</p>
+                    <div id="room-container">
+                        {% for room in rooms %}
+                        <a href="{% url 'book_training_room' room.id %}" class="button job-link">
+                            <i class="fas fa-door-open"></i> Book Training Room {{ room.number }}
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        
+              <section id="communication-tools" class="card">
+                <h2><i class="fas fa-comments"></i> Communication Tools</h2>
+                <form id="communication-form">
+                    <a class= "link" href="{% url 'contact_list' %}">
+                        <button type="button"><i class="fas fa-paper-plane"></i> Send Message</button>
+                    </a>
+                </form>
+            </section>
+            
+
+              <section id="contract-management" class="card">
+                  <h2><i class="fas fa-file-contract"></i> Contract Management</h2>
+                  <form id="contract-form"> 
+                    <a class= "link" href="{% url 'view_company_contracts' %}">       
+                      <button type="button" onclick="manageContracts()"><i class="fas fa-file-signature"></i> View Contract</button>
+                    </a> 
+                  </form>
+              </section>
+              <div id="announcement-modal" class="modal" style="display: none;">
+                <div class="modal-content">
+                    <span class="close" id="close-announcement-modal-btn">&times;</span>
+                    <h2 class="modal-title"><i class="fas fa-bullhorn"></i> Announcements</h2>
+                    <p class="modal-description">Here are the latest announcements:</p>
+                    <div id="announcement-container">
+                        {% if announcements %}
+                            <ul>
+                                {% for announcement in announcements %}
+                                    <li>
+                                        {{ announcement.text }} 
+                                        <em>({{ announcement.created_at|date:"Y-m-d H:i" }})</em>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <p>No announcements available.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+          </main>
+  <script>
+      document.getElementById('manage-rooms-company').addEventListener('click', function () {
+          var url = document.getElementById('manage-rooms-company-link').href;
+          window.location.href = url;
+      });
+      document.getElementById('add-company').addEventListener('click', function () {
+          var url = document.getElementById('add-company-link').href;
+          window.location.href = url;
+      });
+      document.getElementById('add-freelancer').addEventListener('click', function () {
+          var url = document.getElementById('add-freelancer-link').href;
+          window.location.href = url;
+      });
+      document.getElementsByClassName('icon').addEventListener('click', function (){
+          var url = document.getElementById('Signout-link').href;
+          window.location.href = url;
+      });
+      function closeModal(modalId) {
+          document.getElementById(modalId).style.display = "none";
+      }
+            
+  </script>  
+  
+ <script>
+        // Get the elements
+        const announcementLink = document.getElementById('announcement-link');
+        const announcementModal = document.getElementById('announcement-modal');
+        const closeAnnouncementModalBtn = document.getElementById('close-announcement-modal-btn');
+
+        // Display the modal when the page loads
+        announcementModal.style.display = 'flex';
+
+        // Open the modal when the link is clicked
+        announcementLink.addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent the default anchor action
+            announcementModal.style.display = 'flex'; // Show the modal
+        });
+
+        // Close the modal when the close button is clicked
+        closeAnnouncementModalBtn.addEventListener('click', function() {
+            announcementModal.style.display = 'none'; // Hide the modal
+        });
+
+        // Close the modal when clicking outside the modal content
+        window.addEventListener('click', function(event) {
+            if (event.target === announcementModal) {
+                announcementModal.style.display = 'none';
+            }
+        });
+    </script>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const dropdownIcon = document.querySelector('.dropdown-icon');
+  
+    dropdownIcon.addEventListener('click', function() {
+      const dropdown = this.parentElement;
+      dropdown.classList.toggle('active'); // Toggle active class
+    });
+  });
+  
+</script>
+<script> document.addEventListener('DOMContentLoaded', function () {
+  // Get modal element
+  const modal = document.getElementById('job-postings-modal');
+
+  // Get the button that opens the modal
+  const btn = document.getElementById('review-application-button');
+
+  // Get the <span> element that closes the modal
+  const closeBtn = document.getElementsByClassName('close')[0];
+
+  // When the user clicks the button, open the modal
+  btn.addEventListener('click', function () {
+      modal.style.display = 'flex'; // Show the modal (use flex for centering)
+  });
+
+  // When the user clicks on <span> (x), close the modal
+  closeBtn.addEventListener('click', function () {
+      modal.style.display = 'none'; // Hide the modal
+  });
+
+  // When the user clicks anywhere outside of the modal, close it
+  window.addEventListener('click', function (event) {
+      if (event.target === modal) {
+          modal.style.display = 'none'; // Hide the modal
+      }
+  });
+});  
+ </script>
+ <script>
+  document.addEventListener('DOMContentLoaded', function () {
+      // Get modal element for rooms
+      const roomModal = document.getElementById('room-management-modal');
+
+      // Get the button that opens the modal
+      const roomBtn = document.getElementById('book-room-button');
+
+      // Get the <span> element that closes the modal
+      const roomCloseBtn = document.getElementById('close-room-modal-btn');
+
+      // When the user clicks the button, open the modal
+      roomBtn.addEventListener('click', function () {
+          roomModal.style.display = 'flex'; // Show the modal (use flex for centering)
+      });
+
+      // When the user clicks on <span> (x), close the modal
+      roomCloseBtn.addEventListener('click', function () {
+          roomModal.style.display = 'none'; // Hide the modal
+      });
+
+      // When the user clicks anywhere outside of the modal, close it
+      window.addEventListener('click', function (event) {
+          if (event.target === roomModal) {
+              roomModal.style.display = 'none'; // Hide the modal
+          }
+      });
+  });
+</script>
+
+  <script src="{% static 'js/adminScripts.js' %}"></script>
+
+  <!-- ====== ionicons ======= -->
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+</body>
+
+</html>

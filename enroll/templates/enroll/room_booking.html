@@ -1,0 +1,53 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Room and Desk Booking</title>
+    <link rel="stylesheet" href="{% static 'css/desk.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Room and Desk Booking</h1>
+        
+        <h2>Add New Room</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ room_form.as_p }}
+            <button type="submit">Add Room</button>
+        </form>
+        
+        <h2>Existing Rooms</h2>
+        <form id="existingRoomsForm">
+            <label for="existingRooms">Select Existing Room:</label>
+            <select id="existingRooms" name="room" onchange="updateButtonLink()">
+                <option value="" disabled selected>Select a room</option>
+                {% for room in existing_rooms %}
+                    <option value="{{ room.id }}">{{ room.name }}</option>
+                {% endfor %}
+            </select>
+            <button type="button" id="addDesksButton" onclick="redirectToAddDesks()">Add Desks</button>
+        </form>
+    </div>
+    
+    <script>
+        function updateButtonLink() {
+            var selectedRoomId = document.getElementById('existingRooms').value;
+            var addDesksButton = document.getElementById('addDesksButton');
+            addDesksButton.setAttribute('data-room-id', selectedRoomId);
+        }
+
+        function redirectToAddDesks() {
+            var addDesksButton = document.getElementById('addDesksButton');
+            var selectedRoomId = addDesksButton.getAttribute('data-room-id');
+            if (selectedRoomId) {
+                var url = "{% url 'add_desks_to_room' 0 %}".replace('0', selectedRoomId);
+                window.location.href = url;
+            } else {
+                alert('Please select a room first.');
+            }
+        }
+    </script>
+</body>
+</html>

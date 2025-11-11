@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>
+        Messages from 
+        {% if sender_type == 'freelancer' %}
+            {{ sender.freelancer_name }}
+        {% else %} 
+            {{ sender.company_name }} 
+        {% endif %}
+    </title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 30px;
+            background: linear-gradient(135deg, #a1c4fd, #c2e9fb);
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        h1 {
+            text-align: center;
+            color: #ff6f61;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-transform: uppercase;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin-bottom: 30px;
+            overflow-y: auto;
+        }
+
+        li {
+            background: #fef3bd;
+            margin: 15px 0;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            transition: background-color 0.3s, transform 0.3s ease;
+        }
+
+        li:hover {
+            background-color: #ffebb5;
+            transform: translateY(-5px);
+        }
+
+        li .message-icon {
+            font-size: 2em;
+            margin-right: 15px;
+            color: #ff6f61;
+        }
+
+        strong {
+            color: #4a90e2;
+        }
+
+        .message-details {
+            flex-grow: 1;
+        }
+
+        .delete-icon {
+            background-color: #ff6f61;
+            border: none;
+            padding: 10px;
+            color: white;
+            font-size: 1em;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s ease;
+        }
+
+        .delete-icon:hover {
+            background-color: #d9534f;
+            transform: scale(1.1);
+        }
+
+        .reply-form {
+            margin-top: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            background-color: #f1f1f1;
+            border-radius: 50px;
+            padding: 5px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .reply-form textarea {
+            border: none;
+            padding: 15px;
+            border-radius: 50px;
+            width: 100%;
+            font-size: 1em;
+            resize: none;
+            background-color: transparent;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        .reply-form textarea::placeholder {
+            color: #888;
+        }
+
+        .send-button {
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .send-button:hover {
+            background-color: #357ab9;
+            transform: scale(1.1);
+        }
+
+        /* Back to inbox button styling */
+        .back-inbox button {
+            background-color: #ff6f61;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1em;
+            display: flex;
+            align-items: center;
+            transition: background-color 0.3s, transform 0.3s ease;
+        }
+
+        .back-inbox button:hover {
+            background-color: #d9534f;
+            transform: scale(1.05);
+        }
+
+        .inbox-icon {
+            margin-right: 10px;
+            font-size: 1.5em;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        a {
+            text-decoration: none;
+            color: white;
+        }
+        .message {
+            position: relative;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            animation: slideIn 0.5s ease-out;
+            display: flex;
+            align-items: center;
+          }
+          
+          .message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border-left: 5px solid #28a745;
+          }
+          
+          .message .icon {
+            margin-right: 10px;
+            font-size: 20px;
+          }
+          .close-button {
+            position: absolute;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: #155724;
+            cursor: pointer;
+          }
+          
+          .close-button:hover {
+            color: #721c24;
+          }
+          
+          @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+          }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            li {
+                padding: 15px;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .message-icon {
+                margin-bottom: 10px;
+            }
+
+            .button-group {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .reply-form {
+                flex-direction: column;
+            }
+
+            .reply-form textarea {
+                width: 100%;
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+
+    <!-- Add JavaScript to scroll to the bottom -->
+    <script>
+        window.onload = function() {
+            // Scroll to the bottom of the page to show the reply form
+            window.scrollTo(0, document.body.scrollHeight);
+        };
+    </script>
+</head>
+<body>
+    <div class="container">
+
+        <h1>Messages from 
+            {% if sender_type == 'freelancer' %}
+                {{ sender.freelancer_name }}
+            {% else %}
+                {{ sender.company_name }}
+            {% endif %}
+        </h1>  
+           
+        <ul>
+            {% for message in messages|slice:":-1" %}
+                <li>
+                    <div class="message-icon">✉️</div>
+                    <div class="message-details">
+                        <strong>Subject:</strong> {{ message.subject }}<br>
+                        <strong>Body:</strong> {{ message.body }}<br>
+                        <em>Received at:</em> {{ message.timestamp }}
+                    </div>
+                    <form method="POST" action="{% url 'delete_message' message.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="delete-icon">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </form>
+                </li>
+            {% empty %}
+                <p>No messages from this sender.</p>
+            {% endfor %}
+        </ul>
+
+        <!-- Reply form at the end of the messages -->
+        <form class="reply-form" method="POST" action="">
+            {% csrf_token %}
+            <textarea name="reply_message" placeholder="Write your reply..."></textarea>
+            <button type="submit" class="send-button">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </form>
+
+        <div class="button-group">
+            <a href="{% url 'freelancer_inbox' %}" class="back-inbox">
+                <button type="button">
+                    <i class="fas fa-arrow-left inbox-icon"></i>
+                    Back to Inbox
+                </button>
+            </a>
+        </div>
+    </div>
+</body>
+</html>

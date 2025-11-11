@@ -1,0 +1,28 @@
+# Virtual environment
+MyEnv/
+venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Django
+*.sqlite3
+media/
+*.log
+
+# IDEs
+.vscode/
+.idea/
+
+# Byte-compiled / distribution
+build/
+dist/
+*.egg-info/
+
+# System files
+.DS_Store
+Thumbs.db

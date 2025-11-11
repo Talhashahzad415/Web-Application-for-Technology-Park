@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Room</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+    <h1>Book a Room</h1>
+
+    {% if messages %}
+        <div class="popup">
+            {% for message in messages %}
+                <p class="popup-message {{ message.tags }}">{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+        <label for="room">Select Room:</label>
+        <select name="room" id="room">
+            {% for room in rooms %}
+                <option value="{{ room.id }}">{{ room.room_number }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="date">Date:</label>
+        <input type="date" name="date" id="date" required>
+
+        <button type="submit">Book Room</button>
+    </form>
+
+    <script>
+        $(document).ready(function() {
+            setTimeout(function() {
+                $('.popup').fadeOut('slow');
+            }, 3000);
+        });
+    </script>
+</body>
+</html>
