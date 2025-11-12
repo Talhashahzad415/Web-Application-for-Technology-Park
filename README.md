@@ -1,8 +1,67 @@
-CRUD Project 1 (crudprojrct1)
+🏢 Web Application for Software Technology Park
 
-This is a simple Django CRUD project. “CRUD” stands for Create, Read, Update, Delete, which are the four basic operations of persistent storage.
+This project is a Django-based web application designed to automate and manage the daily operations of a Software Technology Park. It implements full CRUD (Create, Read, Update, Delete) functionality and provides dedicated portals for Freelancers, Companies, and Administrators.
 
-This project allows users to perform these operations on a database (like adding or updating records).
+🚀 Overview
+
+The system streamlines and digitizes several key management tasks within the park. It enables real-time tracking, booking, and communication among stakeholders, helping to maintain an organized, efficient, and collaborative environment.
+
+⚙️ Key Features
+🔸 1. Automated Booking System
+
+Room Booking: Companies can book rooms based on availability.
+
+Desk Booking: Freelancers can reserve desks within the co-working space.
+
+Meeting Room Booking: Both companies and freelancers can schedule meeting rooms.
+
+Status Monitoring: The system dynamically displays the availability status of all rooms, desks, and meeting rooms.
+
+🔸 2. Messaging System
+
+Built-in chat functionality allows seamless communication between freelancers and companies.
+
+Messages are stored securely and can be accessed anytime by the users.
+
+🔸 3. Complaint Management
+
+Both freelancers and companies can submit complaints or requests to the admin through their respective portals.
+
+Admins can view, respond to, and resolve complaints efficiently.
+
+🔸 4. Multi-Portal Access
+
+Freelancer Portal: Allows freelancers to book desks, communicate with companies, and send complaints to admin.
+
+Company Portal: Enables companies to book rooms, hold meetings, message freelancers, and manage complaints.
+
+Admin Portal: Provides administrators with full control over bookings, complaints, and user management.
+
+🔸 5. CRUD Functionality
+
+Each module (Rooms, Desks, Meeting Rooms, Users, Messages, and Complaints) supports:
+
+Create – Add new records
+
+Read – View details and availability
+
+Update – Modify existing entries
+
+Delete – Remove records
+
+🧰 Tech Stack
+
+Backend: Django (Python)
+
+Frontend: HTML, CSS, JavaScript
+
+Database: SQLite
+
+Frameworks/Tools: Django
+
+📈 Outcome
+
+This application reduces manual workload by automating bookings, communication, and complaint handling. It improves space utilization, enhances transparency, and supports better coordination among companies, freelancers, and administrators.
 
 🧩 Project Backend
 
