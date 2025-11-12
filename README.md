@@ -101,7 +101,7 @@ Follow these steps carefully to run this project on your own machine.
 
 Open a terminal and run:
 
-git clone -b talha https://github.com/mohsinprof/crudprojrct1.git
+git clone -b talha https://github.com/Talhashahzad415/Web-Application-for-Technology-Park
 cd crudprojrct1
 
 
@@ -206,4 +206,5 @@ git push
 
 🔗 GitHub Repository
 
-https://github.com/mohsinprof/crudprojrct1
+https://github.com/Talhashahzad415/Web-Application-for-Technology-Park
+
